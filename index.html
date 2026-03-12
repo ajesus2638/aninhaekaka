@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Nossa História 💜</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#cfa7ff;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.game{
+width:900px;
+background:white;
+border-radius:20px;
+padding:30px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+h2{
+color:#7b3cff;
+}
+
+#personagens{
+display:flex;
+justify-content:space-between;
+margin:20px 40px;
+}
+
+.personagem{
+font-size:120px;
+}
+
+#historia{
+font-size:20px;
+margin:20px;
+min-height:120px;
+}
+
+button{
+padding:12px;
+margin:6px;
+border:none;
+border-radius:10px;
+background:#8a4fff;
+color:white;
+cursor:pointer;
+width:80%;
+font-size:16px;
+}
+
+button:hover{
+background:#6c35d9;
+}
+
+input{
+padding:10px;
+width:200px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+<h2>Nossa História 💜</h2>
+
+<div id="inicio">
+
+<p>Digite os nomes das personagens</p>
+
+<input id="nome1" placeholder="Nome"><br><br>
+<input id="nome2" placeholder="Nome"><br><br>
+
+<button onclick="iniciar()">Começar História</button>
+
+</div>
+
+<div id="jogo" style="display:none">
+
+<h3 id="capitulo"></h3>
+
+<div id="personagens">
+
+<div class="personagem">👱🏻‍♀️</div>
+<div class="personagem">👩🏽</div>
+
+</div>
+
+<div id="historia"></div>
+
+<div id="opcoes"></div>
+
+<br>
+<button onclick="reiniciar()">Reiniciar</button>
+
+</div>
+
+</div>
+
+<script>
+
+let nome1=""
+let nome2=""
+let capitulo=0
+
+const historia=[
+
+{
+texto:"{n1} vê {n2} pela primeira vez em uma conversa online. Algo nela chama atenção imediatamente.",
+opcoes:[
+{texto:"Mandar uma mensagem",destino:1},
+{texto:"Observar a conversa primeiro",destino:2}
+]
+},
+
+{
+texto:"{n1} manda uma mensagem e {n2} responde rapidamente. A conversa começa tímida, mas interessante.",
+opcoes:[
+{texto:"Fazer uma pergunta sobre ela",destino:3},
+{texto:"Fazer uma piada",destino:4}
+]
+},
+
+{
+texto:"{n1} observa {n2} por um tempo e percebe que ela parece gentil e divertida.",
+opcoes:[
+{texto:"Criar coragem e mandar mensagem",destino:1},
+{texto:"Esperar mais um pouco",destino:5}
+]
+},
+
+{
+texto:"{n2} começa a falar sobre seus hobbies e pergunta sobre os de {n1}.",
+opcoes:[
+{texto:"Contar sobre sua vida",destino:6},
+{texto:"Perguntar sobre sonhos",destino:7}
+]
+},
+
+{
+texto:"A piada faz {n2} rir bastante. O clima entre vocês fica leve.",
+opcoes:[
+{texto:"Elogiar o sorriso dela",destino:6},
+{texto:"Continuar brincando",destino:7}
+]
+},
+
+{
+texto:"Mesmo esperando, {n1} continua pensando em {n2}.",
+opcoes:[
+{texto:"Mandar mensagem agora",destino:1},
+{texto:"Deixar isso para lá",destino:12}
+]
+},
+
+{
+texto:"A conversa fica cada vez mais longa. Vocês passam horas falando sobre tudo.",
+opcoes:[
+{texto:"Perguntar se ela quer sair um dia",destino:8},
+{texto:"Falar que gosta de conversar com ela",destino:9}
+]
+},
+
+{
+texto:"{n2} conta alguns sonhos que tem para o futuro.",
+opcoes:[
+{texto:"Compartilhar seus sonhos também",destino:9},
+{texto:"Perguntar se ela acredita em destino",destino:10}
+]
+},
+
+{
+texto:"Vocês decidem se encontrar pessoalmente para conversar melhor.",
+opcoes:[
+{texto:"Passear no parque",destino:10},
+{texto:"Ir tomar café juntas",destino:11}
+]
+},
+
+{
+texto:"{n2} sorri e diz que também gosta muito de conversar com {n1}.",
+opcoes:[
+{texto:"Confessar que sente algo especial",destino:13},
+{texto:"Sorrir e continuar o momento",destino:13}
+]
+},
+
+{
+texto:"Durante o passeio, vocês riem muito e percebem que têm muita química.",
+opcoes:[
+{texto:"Segurar a mão dela",destino:13},
+{texto:"Dizer que está feliz ali",destino:13}
+]
+},
+
+{
+texto:"No café, a conversa fica profunda e sincera.",
+opcoes:[
+{texto:"Falar sobre sentimentos",destino:13},
+{texto:"Dizer que ela é especial",destino:13}
+]
+},
+
+{
+texto:"Mesmo sem conversar mais naquele momento, {n1} nunca esquece {n2}.",
+opcoes:[]
+},
+
+{
+texto:"💜 {n1} e {n2} percebem que gostam muito uma da outra e decidem começar algo juntas.",
+opcoes:[
+{texto:"Continuar essa história juntas",destino:14},
+{texto:"Prometer cuidar uma da outra",destino:14}
+]
+},
+
+{
+texto:"💖 Final Feliz: {n1} e {n2} continuam juntas, criando memórias e descobrindo que o amor entre elas só cresce com o tempo.",
+opcoes:[]
+}
+
+]
+
+function iniciar(){
+
+nome1=document.getElementById("nome1").value
+nome2=document.getElementById("nome2").value
+
+if(nome1==""||nome2==""){
+alert("Digite os nomes")
+return
+}
+
+document.getElementById("inicio").style.display="none"
+document.getElementById("jogo").style.display="block"
+
+mostrarCena(0)
+
+}
+
+function substituir(texto){
+
+return texto
+.replaceAll("{n1}",nome1)
+.replaceAll("{n2}",nome2)
+
+}
+
+function mostrarCena(i){
+
+capitulo++
+
+let cena=historia[i]
+
+document.getElementById("capitulo").innerText="Capítulo "+capitulo
+
+document.getElementById("historia").innerText=substituir(cena.texto)
+
+let html=""
+
+cena.opcoes.forEach(op=>{
+
+html+=`<button onclick="mostrarCena(${op.destino})">${substituir(op.texto)}</button>`
+
+})
+
+document.getElementById("opcoes").innerHTML=html
+
+}
+
+function reiniciar(){
+location.reload()
+}
+
+</script>
+
+</body>
+</html>
